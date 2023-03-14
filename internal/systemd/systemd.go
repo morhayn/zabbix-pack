@@ -25,8 +25,8 @@ type Systemd struct {
 func newRes(name, descr string) map[string]string {
 	var r = make(map[string]string)
 	n := strings.TrimSuffix(name, ".service")
-	r["{#SERVICE}"] = n
-	r["{#DESCRIPTION}"] = descr
+	r["{#UNIT.NAME}"] = n
+	r["{#UNIT.DESCRIPTION}"] = descr
 	return r
 }
 func Discaver() error {
