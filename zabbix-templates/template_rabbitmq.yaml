@@ -1,0 +1,78 @@
+zabbix_export:
+  version: "5.4"
+  date: "2021-04-16T15:29:35Z"
+  groups:
+    - 
+      name: Templates/Modules
+  templates:
+    - 
+      template: Module RabbitMq Queue Check
+      name: Module RabbitMq Queue Check
+      groups:
+        - 
+          name: Templates/Modules
+      discovery_rules:
+        - 
+          name: RabbitMq Queue discovery
+          key: rabbitmq.discovery
+          delay: 3h
+          item_prototypes:
+            - name: Length Queue {#QUEUENAME} description {#VHOST}
+              key: rabbitmq.lenmessage[{#QUEUENAME},{#VHOST}]
+              description: |
+                Description: {#QUEUENAME}
+              delay: 10m
+              history: 14d
+              trends: 180d
+              tags:
+                -
+                  tag: Application
+                  value: RabbitMq
+              trigger_prototypes:
+                -
+                  expression: 'last(/Module RabbitMq Queue Check/rabbitmq.lenmessage["{#QUEUENAME}"])>200'
+                  name: 'Queue {#QUEUENAME} have more 200 mesaage!'
+                  opdata: 'Service current state: {ITEM.LASTVALUE}'
+                  priority: WARNING
+                  description: |
+                    Description: {#UNIT.DESCRIPTION}
+          item_prototypes:
+            - name:  Redeliver {#QUEUENAME}
+              key: rabbitmq.redeliver[{#QUEUENAME},{#VHOST}]
+              description: |
+                Description: {#QUEUENAME}
+              delay: 10m
+              history: 14d
+              trends: 180d
+              tags:
+                -
+                  tag: Application
+                  value: RabbitMq
+              trigger_prototypes:
+                -
+                  expression: 'last(/Module RabbitMq Queue Check/rabbitmq.redeliver["{#QUEUENAME}"])>20'
+                  name: 'Redeliver messages {#QUEUENAME} have more 20!'
+                  opdata: 'Service current state: {ITEM.LASTVALUE}'
+                  priority: WARNING
+                  description: |
+                    Description: {#UNIT.DESCRIPTION}
+          item_prototypes:
+            - name:  Active Consumer {#QUEUENAME}
+              key: rabbitmq.activeconsumer[{#QUEUENAME},{#VHOST}]
+              description: |
+                Description: {#QUEUENAME}
+              delay: 10m
+              history: 14d
+              trends: 180d
+              tags:
+                -
+                  tag: Application
+                  value: RabbitMq
+              trigger_prototypes:
+                -
+                  expression: 'last(/Module RabbitMq Queue Check/rabbitmq.activeconsumer["{#QUEUENAME}"])=0'
+                  name: 'Active Consumer {#QUEUENAME} have more 0!'
+                  opdata: 'Service current state: {ITEM.LASTVALUE}'
+                  priority: WARNING
+                  description: |
+                    Description: {#UNIT.DESCRIPTION}

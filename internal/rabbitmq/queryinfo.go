@@ -1,4 +1,4 @@
-package rabitmq
+package rabbitmq
 
 // QueueInfo represents a queue, its properties and key metrics.
 type QueueInfo struct {

@@ -1,4 +1,4 @@
-package rabitmq
+package rabbitmq
 
 import (
 	"encoding/json"
@@ -195,7 +195,7 @@ func (c *Client) GetQueue(vhost, queue string) (rec *QueueInfo, err error) {
 	}
 	return rec, nil
 }
-func makeRabbitMQClient(dsn string, username string, password string, caPath string, timeout time.Duration) (*Client, error) {
+func makeRabbitMQClient(dsn string, username string, password string, timeout time.Duration) (*Client, error) {
 	var (
 		rmqc *Client
 		err  error
@@ -207,9 +207,58 @@ func makeRabbitMQClient(dsn string, username string, password string, caPath str
 	rmqc.SetTimeout(timeout)
 	return rmqc, nil
 }
-func Discaver() {
-
+func newQueue(q QueueInfo) map[string]string {
+	var res = make(map[string]string)
+	res["{#QUEUENAME}"] = q.Name
+	res["{#VHOST}"] = q.Vhost
+	return res
 }
-func Status() {
-
+func Discaver() error {
+	result := make(map[string][]map[string]string)
+	var res []map[string]string
+	client, err := makeRabbitMQClient("http://127.0.0.1:5172", "zabbix", "passwd", 2*time.Second)
+	if err != nil {
+		return err
+	}
+	listQ, err := client.ListQueues()
+	if err != nil {
+		return err
+	}
+	for _, queue := range listQ {
+		res = append(res, newQueue(queue))
+	}
+	result["data"] = res
+	out, err := json.Marshal(result)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("%s\n", out)
+	return nil
+}
+func LenMessage(queue, vhost string) error {
+	client, err := makeRabbitMQClient("http://127.0.0.1:5172", "zabbix", "passwd", 2*time.Second)
+	if err != nil {
+		return err
+	}
+	q, err := client.GetQueue(vhost, queue)
+	fmt.Print(q.Messages)
+	return nil
+}
+func RedeliverMessage(queue, vhost string) error {
+	client, err := makeRabbitMQClient("http://127.0.0.1:5172", "zabbix", "passwd", 2*time.Second)
+	if err != nil {
+		return err
+	}
+	q, err := client.GetQueue(vhost, queue)
+	fmt.Print(q.MessageStats.Redeliver)
+	return nil
+}
+func ActiveConsumer(queue, vhost string) error {
+	client, err := makeRabbitMQClient("http://127.0.0.1:5172", "zabbix", "passwd", 2*time.Second)
+	if err != nil {
+		return err
+	}
+	q, err := client.GetQueue(vhost, queue)
+	fmt.Print(q.MessageStats.Redeliver)
+	return nil
 }

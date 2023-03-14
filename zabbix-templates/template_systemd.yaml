@@ -39,7 +39,6 @@ zabbix_export:
                     Description: {#UNIT.DESCRIPTION}
       valuemaps:
         -
-          uuid: 0af62e80c7284017912d353bf96bea1e
           name: 'Service state'
           mappings:
             -
