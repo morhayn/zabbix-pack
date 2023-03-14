@@ -6,16 +6,11 @@ import (
 	"os/exec"
 
 	"github.com/mkideal/cli"
+	"github.com/morhayn/zabbix-pack/internal/argparser"
 )
 
 // systemctl -t service -o json  --no-pager
 
-type argT struct {
-	cli.Helper
-	Res     string `cli:"r,res" usage:"name resurce for monitoring"`
-	Service string `cli:"s,service" usage:"service for monitoring"`
-	Name    string `cli:"n,name" usage:"name service"`
-}
 type Systemd struct {
 	Data []map[string]string
 	// Unit        string `json:"unit"`
@@ -27,13 +22,15 @@ type Systemd struct {
 }
 
 func main() {
-	cli.Run(new(argT), func(ctx *cli.Context) error {
+	cli.Run(new(argparser.argT), func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*argT)
+		fmt.Printf("%T", argv)
+		argparser.Parser(argv)
 		fmt.Println(argv, argv.Help, argv.Helper)
 		fmt.Println(argv.Res)
 		fmt.Println(argv.Service)
 		out, err := exec.Command("/usr/bin/systemctl", "-t", "service", "-o", "json", "--no-page").Output()
-		exec.Command("/usr/bin/systemctl", "is-active", service)
+		// exec.Command("/usr/bin/systemctl", "is-active", service)
 		if err != nil {
 			fmt.Println(err)
 		}
