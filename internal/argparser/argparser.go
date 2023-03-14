@@ -11,6 +11,6 @@ type argT struct {
 	Name    string `cli:"n,name" usage:"name service"`
 }
 
-func Parser(arg) {
+func Parser() {
 
 }
