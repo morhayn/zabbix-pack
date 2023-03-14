@@ -213,10 +213,10 @@ func newQueue(q QueueInfo) map[string]string {
 	res["{#VHOST}"] = q.Vhost
 	return res
 }
-func Discaver() error {
+func Discaver(user, pass string) error {
 	result := make(map[string][]map[string]string)
 	var res []map[string]string
-	client, err := makeRabbitMQClient("http://127.0.0.1:5172", "zabbix", "passwd", 2*time.Second)
+	client, err := makeRabbitMQClient("http://127.0.0.1:5172", user, pass, 2*time.Second)
 	if err != nil {
 		return err
 	}
@@ -235,8 +235,8 @@ func Discaver() error {
 	fmt.Printf("%s\n", out)
 	return nil
 }
-func LenMessage(queue, vhost string) error {
-	client, err := makeRabbitMQClient("http://127.0.0.1:5172", "zabbix", "passwd", 2*time.Second)
+func LenMessage(queue, vhost, user, pass string) error {
+	client, err := makeRabbitMQClient("http://127.0.0.1:5172", user, pass, 2*time.Second)
 	if err != nil {
 		return err
 	}
@@ -244,8 +244,8 @@ func LenMessage(queue, vhost string) error {
 	fmt.Print(q.Messages)
 	return nil
 }
-func RedeliverMessage(queue, vhost string) error {
-	client, err := makeRabbitMQClient("http://127.0.0.1:5172", "zabbix", "passwd", 2*time.Second)
+func RedeliverMessage(queue, vhost, user, pass string) error {
+	client, err := makeRabbitMQClient("http://127.0.0.1:5172", user, pass, 2*time.Second)
 	if err != nil {
 		return err
 	}
@@ -253,8 +253,8 @@ func RedeliverMessage(queue, vhost string) error {
 	fmt.Print(q.MessageStats.Redeliver)
 	return nil
 }
-func ActiveConsumer(queue, vhost string) error {
-	client, err := makeRabbitMQClient("http://127.0.0.1:5172", "zabbix", "passwd", 2*time.Second)
+func ActiveConsumer(queue, vhost, user, pass string) error {
+	client, err := makeRabbitMQClient("http://127.0.0.1:5172", user, pass, 2*time.Second)
 	if err != nil {
 		return err
 	}
