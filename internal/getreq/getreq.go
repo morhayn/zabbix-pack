@@ -66,7 +66,7 @@ func NewGETRequest(client *Client, path string) (*http.Request, error) {
 	return req, err
 }
 
-func executeRequest(client *Client, req *http.Request) (resp *http.Response, err error) {
+func ExecuteRequest(client *Client, req *http.Request) (resp *http.Response, err error) {
 	httpc := &http.Client{
 		Timeout: client.Timeout,
 	}
@@ -87,7 +87,7 @@ func executeRequest(client *Client, req *http.Request) (resp *http.Response, err
 }
 
 func ExecuteAndParseRequest(client *Client, req *http.Request, rec interface{}) (err error) {
-	res, err := executeRequest(client, req)
+	res, err := ExecuteRequest(client, req)
 	if err != nil {
 		return err
 	}
