@@ -1,6 +1,7 @@
 package systemd
 
 import (
+	"encoding/json"
 	"fmt"
 	"os/exec"
 	"strings"
@@ -23,10 +24,6 @@ var (
 	}
 )
 
-type Systemd struct {
-	Data []map[string]string
-}
-
 func newRes(name, descr string) map[string]string {
 	var r = make(map[string]string)
 	n := strings.TrimSuffix(name, ".service")
@@ -36,52 +33,44 @@ func newRes(name, descr string) map[string]string {
 }
 func Discover() error {
 	// serv := make(map[string]string)
-	// result := make(map[string][]map[string]string)
-	// var res []map[string]string
+	result := make(map[string][]map[string]string)
+	var res []map[string]string
 	o, err := exec.Command("/bin/systemctl", "-t", "service", "--state", "active", "--no-legend", "--no-page").Output()
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
 	l := strings.Split(string(o), "\n")
+	system := make(map[string]string)
 	for _, str := range l {
 		field := (strings.Fields(str))
 		if len(field) > 3 {
-			fmt.Println(field[0], field[3])
+			system[field[0]] = field[3]
 		}
 	}
-	// system := Systemd{}
-	// fmt.Println(string(o))
-	// err = json.Unmarshal([]byte(o), &system.Data)
-	// if err != nil {
-	// fmt.Println(err)
-	// }
-	// for _, service := range system.Data {
-	// serv[service["unit"]] = service["desciption"]
-	// }
-	// fmt.Println(monServ)
-	// for _, v := range monServ {
-	// if r, ok := serv[v]; ok {
-	// res = append(res, newRes(v, r))
-	// }
-	// }
-	// result["data"] = res
-	// out, err := json.Marshal(result)
-	// if err != nil {
-	// return err
-	// }
-	// fmt.Printf("%s\n", out)
-	return nil
-}
-func Status(service string) error {
-	o, err := exec.Command("/usr/bin/systemctl", "is-active", service).Output()
+	for _, v := range monServ {
+		if r, ok := system[v]; ok {
+			res = append(res, newRes(v, r))
+		}
+	}
+	result["data"] = res
+	out, err := json.Marshal(result)
 	if err != nil {
 		return err
 	}
+	fmt.Printf("%s\n", out)
+	return nil
+}
+func Status(service string) error {
+	o, err := exec.Command("/bin/systemctl", "is-active", service).Output()
+	if err != nil {
+		fmt.Print("0")
+		return err
+	}
 	if strings.TrimSpace(string(o)) == "active" {
-		fmt.Print(1)
+		fmt.Print("1")
 	} else {
-		fmt.Print(0)
+		fmt.Print("0")
 	}
 	return nil
 }

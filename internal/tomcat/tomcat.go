@@ -74,8 +74,9 @@ func Discover(port, username, password string) error {
 	return nil
 }
 func Status(warname, port, username, password string) error {
-	listTomcat, err := TomcatParse("manage/text/list", username, password, port)
+	listTomcat, err := TomcatParse("manager/text/list", username, password, port)
 	if err != nil {
+		fmt.Print("0")
 		return err
 	}
 	for _, warfile := range listTomcat {
