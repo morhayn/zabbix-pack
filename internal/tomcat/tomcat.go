@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"net/http"
 	"strings"
 	"time"
 
@@ -16,12 +15,25 @@ type TomcatWar struct {
 	Status string
 }
 
-func TomcatParse(res *http.Response) ([]TomcatWar, error) {
-	defer res.Body.Close()
+func TomcatParse(url, username, password string) ([]TomcatWar, error) {
 	tomcat := []TomcatWar{}
+	client, err := getreq.NewClient("http://127.0.0.1:8080", username, password)
+	if err != nil {
+		return tomcat, err
+	}
+	client.SetTimeout(2 * time.Second)
+	req, err := getreq.NewGETRequest(client, "manage/text/list")
+	if err != nil {
+		return tomcat, err
+	}
+	res, err := getreq.ExecuteRequest(client, req)
+	if err != nil {
+		return tomcat, err
+	}
+	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		return []TomcatWar{}, err
+		return tomcat, err
 	}
 	lines := strings.Split(string(body), "\n")
 	//First string in array "OK - Listed applications for virtual host localhost" its only status tomcat
@@ -41,17 +53,7 @@ func TomcatParse(res *http.Response) ([]TomcatWar, error) {
 func Discover(port, username, password string) error {
 	result := make(map[string][]map[string]string)
 	var res []map[string]string
-	client, err := getreq.NewClient("http://127.0.0.1:8080", username, password)
-	if err != nil {
-		return err
-	}
-	client.SetTimeout(2 * time.Second)
-	req, err := getreq.NewGETRequest(client, "manage/text/list")
-	if err != nil {
-		return err
-	}
-	response, err := getreq.ExecuteRequest(client, req)
-	listTomcat, err := TomcatParse(response)
+	listTomcat, err := TomcatParse("manage/text/list", username, password)
 	if err != nil {
 		return err
 	}
@@ -69,4 +71,20 @@ func Discover(port, username, password string) error {
 	fmt.Printf("%s\n", out)
 	return nil
 }
-func Status() {}
+func Status(warname, port, username, password string) error {
+	listTomcat, err := TomcatParse("manage/text/list", username, password)
+	if err != nil {
+		return err
+	}
+	for _, warfile := range listTomcat {
+		if warfile.Name == warname {
+			if warfile.Status == "running" {
+				fmt.Print("1")
+			} else {
+				fmt.Print("0")
+			}
+			break
+		}
+	}
+	return nil
+}

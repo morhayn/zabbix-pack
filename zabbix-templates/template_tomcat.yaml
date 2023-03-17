@@ -1,0 +1,38 @@
+zabbix_export:
+  version: "5.4"
+  date: "2021-04-16T15:29:35Z"
+  groups:
+    - 
+      name: Templates/Modules
+  templates:
+    - 
+      template: Module Tomcat Wars Check
+      name: Module Tomcat Wars Check
+      groups:
+        - 
+          name: Templates/Modules
+      discovery_rules:
+        - 
+          name: Tomcat discovery
+          key: tomcat.discovery
+          delay: 3h
+          item_prototypes:
+            - name: TOMCAT {#WAR.NAME}
+              key: tomcat.status[{#WAR.NAME}]
+              description: |
+                Description: {#WAR.NAME}
+              delay: 10m
+              history: 14d
+              trends: 180d
+              tags:
+                -
+                  tag: Application
+                  value: Tomcat
+              trigger_prototypes:
+                -
+                  expression: 'last(/Module Tomcat Wars Check/rabbitmq.status["{#WAR.NAME}"])<>1'
+                  name: 'Tomcat war {#WAR.NAME} not running'
+                  opdata: 'Service current state: {ITEM.LASTVALUE}'
+                  priority: WARNING
+                  description: |
+                    Description: {#WAR.NAME}

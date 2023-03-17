@@ -4,6 +4,7 @@ import (
 	"github.com/mkideal/cli"
 	"github.com/morhayn/zabbix-pack/internal/rabbitmq"
 	"github.com/morhayn/zabbix-pack/internal/systemd"
+	"github.com/morhayn/zabbix-pack/internal/tomcat"
 )
 
 // var (
@@ -22,6 +23,7 @@ type ArgT struct {
 	Vhost string `cli:"v,vhost" usage:"rabbitmq vhost"`
 	User  string `cli:"u,user" usage:"user name"`
 	Pass  string `cli:"p,pass" usage:"password"`
+	Port  string `cli:"port" usage:"tomcat port"`
 }
 
 func Parser(arg *ArgT) error {
@@ -42,6 +44,10 @@ func Parser(arg *ArgT) error {
 		rabbitmq.RedeliverMessage(arg.Name, arg.Vhost, arg.User, arg.Pass)
 	case "rabbitmq.activeconsume":
 		rabbitmq.ActiveConsumer(arg.Name, arg.Vhost, arg.User, arg.Pass)
+	case "tomcat.discover":
+		tomcat.Discover(arg.Port, arg.User, arg.Pass)
+	case "tomcat.status":
+		tomcat.Status(arg.Name, arg.Port, arg.User, arg.Pass)
 	}
 	return nil
 }
