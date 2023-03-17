@@ -1,7 +1,6 @@
 package systemd
 
 import (
-	"encoding/json"
 	"fmt"
 	"os/exec"
 	"strings"
@@ -10,11 +9,17 @@ import (
 var (
 	monServ = []string{
 		"tomcat8.service",
-		"rabbit-mq.service",
+		"tomcat1.service",
+		"rabbitmq-server.service",
 		"postgres.service",
+		"postgresql@9.6-main",
 		"mongod.service",
 		"elasticsearch.service",
 		"nginx.service",
+		"haproxy.service",
+		"kafka.service",
+		"zookeeper.service",
+		"hazelcast.service",
 	}
 )
 
@@ -29,30 +34,43 @@ func newRes(name, descr string) map[string]string {
 	r["{#UNIT.DESCRIPTION}"] = descr
 	return r
 }
-func Discaver() error {
-	serv := make(map[string]string)
-	result := make(map[string][]map[string]string)
-	var res []map[string]string
-	o, err := exec.Command("/usr/bin/systemctl", "-t", "service", "-o", "json", "--no-page").Output()
+func Discover() error {
+	// serv := make(map[string]string)
+	// result := make(map[string][]map[string]string)
+	// var res []map[string]string
+	o, err := exec.Command("/bin/systemctl", "-t", "service", "--state", "active", "--no-legend", "--no-page").Output()
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
-	system := Systemd{}
-	err = json.Unmarshal([]byte(o), &system.Data)
-	for _, service := range system.Data {
-		serv[service["unit"]] = service["desciption"]
-	}
-	for _, v := range monServ {
-		if r, ok := serv[v]; ok {
-			res = append(res, newRes(v, r))
+	l := strings.Split(string(o), "\n")
+	for _, str := range l {
+		field := (strings.Fields(str))
+		if len(field) > 3 {
+			fmt.Println(field[0], field[3])
 		}
 	}
-	result["data"] = res
-	out, err := json.Marshal(result)
-	if err != nil {
-		return err
-	}
-	fmt.Printf("%s\n", out)
+	// system := Systemd{}
+	// fmt.Println(string(o))
+	// err = json.Unmarshal([]byte(o), &system.Data)
+	// if err != nil {
+	// fmt.Println(err)
+	// }
+	// for _, service := range system.Data {
+	// serv[service["unit"]] = service["desciption"]
+	// }
+	// fmt.Println(monServ)
+	// for _, v := range monServ {
+	// if r, ok := serv[v]; ok {
+	// res = append(res, newRes(v, r))
+	// }
+	// }
+	// result["data"] = res
+	// out, err := json.Marshal(result)
+	// if err != nil {
+	// return err
+	// }
+	// fmt.Printf("%s\n", out)
 	return nil
 }
 func Status(service string) error {

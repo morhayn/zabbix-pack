@@ -104,7 +104,7 @@ func newQueue(q QueueInfo) map[string]string {
 	res["{#VHOST}"] = q.Vhost
 	return res
 }
-func Discaver(user, pass string) error {
+func Discover(user, pass string) error {
 	result := make(map[string][]map[string]string)
 	var res []map[string]string
 	client, err := makeRabbitMQClient("http://127.0.0.1:5172", user, pass, 2*time.Second)

@@ -14,7 +14,7 @@ zabbix_export:
       discovery_rules:
         - 
           name: Systemd service discovery
-          key: systemd.discovery
+          key: systemd.discover
           delay: 3h
           item_prototypes:
             - name: Service {#UNIT.NAME} description {#UNIT.DESCRIPTION}

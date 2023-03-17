@@ -33,11 +33,11 @@ func Parser(arg *ArgT) error {
 	// }
 	switch arg.Res {
 	case "systemd.discover":
-		systemd.Discaver()
+		systemd.Discover()
 	case "systemd.status":
 		systemd.Status(arg.Name)
 	case "rabbitmq.discover":
-		rabbitmq.Discaver(arg.User, arg.Pass)
+		rabbitmq.Discover(arg.User, arg.Pass)
 	case "rabbitmq.lenmessage":
 		rabbitmq.LenMessage(arg.Name, arg.Vhost, arg.User, arg.Pass)
 	case "rabbitmq.redeliver":

@@ -14,7 +14,7 @@ zabbix_export:
       discovery_rules:
         - 
           name: Tomcat discovery
-          key: tomcat.discovery
+          key: tomcat.discover
           delay: 3h
           item_prototypes:
             - name: TOMCAT {#WAR.NAME}

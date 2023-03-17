@@ -55,7 +55,7 @@ func (c *Client) SetTimeout(timeout time.Duration) {
 }
 
 func NewGETRequest(client *Client, path string) (*http.Request, error) {
-	s := client.Endpoint + "/api/" + path
+	s := client.Endpoint + "/" + path
 	req, err := http.NewRequest("GET", s, nil)
 	if err != nil {
 		return nil, err
@@ -107,13 +107,13 @@ func parseResponseErrors(res *http.Response) (err error) {
 	if res.Request.Method == http.MethodDelete && res.StatusCode == http.StatusNotFound {
 		return nil
 	}
-	if res.StatusCode >= http.StatusBadRequest {
-		rme := ErrorResponse{}
-		if err = json.NewDecoder(res.Body).Decode(&rme); err != nil {
-			rme.Message = fmt.Sprintf("Error %d from RabbitMQ: %s", res.StatusCode, err)
-		}
-		rme.StatusCode = res.StatusCode
-		return rme
-	}
+	// if res.StatusCode >= http.StatusBadRequest {
+	// rme := ErrorResponse{}
+	// if err = json.NewDecoder(res.Body).Decode(&rme); err != nil {
+	// rme.Message = fmt.Sprintf("Error %d from RabbitMQ: %s", res.StatusCode, err)
+	// }
+	// rme.StatusCode = res.StatusCode
+	// return rme
+	// }
 	return nil
 }

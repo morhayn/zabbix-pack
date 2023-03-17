@@ -14,7 +14,7 @@ zabbix_export:
       discovery_rules:
         - 
           name: RabbitMq Queue discovery
-          key: rabbitmq.discovery
+          key: rabbitmq.discover
           delay: 3h
           item_prototypes:
             - name: Length Queue {#QUEUENAME} description {#VHOST}

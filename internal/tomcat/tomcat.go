@@ -15,14 +15,14 @@ type TomcatWar struct {
 	Status string
 }
 
-func TomcatParse(url, username, password string) ([]TomcatWar, error) {
+func TomcatParse(url, username, password, port string) ([]TomcatWar, error) {
 	tomcat := []TomcatWar{}
-	client, err := getreq.NewClient("http://127.0.0.1:8080", username, password)
+	client, err := getreq.NewClient("http://127.0.0.1:"+port, username, password)
 	if err != nil {
 		return tomcat, err
 	}
 	client.SetTimeout(2 * time.Second)
-	req, err := getreq.NewGETRequest(client, "manage/text/list")
+	req, err := getreq.NewGETRequest(client, "manager/text/list")
 	if err != nil {
 		return tomcat, err
 	}
@@ -53,15 +53,17 @@ func TomcatParse(url, username, password string) ([]TomcatWar, error) {
 func Discover(port, username, password string) error {
 	result := make(map[string][]map[string]string)
 	var res []map[string]string
-	listTomcat, err := TomcatParse("manage/text/list", username, password)
+	listTomcat, err := TomcatParse("manager/text/list", username, password, port)
 	if err != nil {
 		return err
 	}
 	for _, warfile := range listTomcat {
-		res = append(res, map[string]string{
-			"{#WAR.NAME}":   warfile.Name,
-			"{#WAR.STATUS}": warfile.Status,
-		})
+		if (warfile.Name != "manager") && (warfile.Name != "host-manager") {
+			res = append(res, map[string]string{
+				"{#WAR.NAME}":   warfile.Name,
+				"{#WAR.STATUS}": warfile.Status,
+			})
+		}
 	}
 	result["data"] = res
 	out, err := json.Marshal(result)
@@ -72,7 +74,7 @@ func Discover(port, username, password string) error {
 	return nil
 }
 func Status(warname, port, username, password string) error {
-	listTomcat, err := TomcatParse("manage/text/list", username, password)
+	listTomcat, err := TomcatParse("manage/text/list", username, password, port)
 	if err != nil {
 		return err
 	}
