@@ -65,7 +65,7 @@ import (
 // ListQueues lists all queues in the cluster. This only includes queues in the
 // virtual hosts accessible to the user.
 func ListQueues(c *getreq.Client) (rec []QueueInfo, err error) {
-	req, err := getreq.NewGETRequest(c, "queues")
+	req, err := getreq.NewGETRequest(c, "api/queues")
 	if err != nil {
 		return []QueueInfo{}, err
 	}
@@ -77,7 +77,7 @@ func ListQueues(c *getreq.Client) (rec []QueueInfo, err error) {
 
 // GetQueue returns information about a queue.
 func GetQueue(c *getreq.Client, vhost, queue string) (rec *QueueInfo, err error) {
-	req, err := getreq.NewGETRequest(c, "queues/"+url.PathEscape(vhost)+"/"+url.PathEscape(queue))
+	req, err := getreq.NewGETRequest(c, "api/queues/"+url.PathEscape(vhost)+"/"+url.PathEscape(queue))
 	if err != nil {
 		return nil, err
 	}

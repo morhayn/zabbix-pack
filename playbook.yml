@@ -1,0 +1,24 @@
+- name: install zabbix-pack
+  hosts: all
+  become: true
+  tasks:
+    - name: Copy files
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dst }}"
+        owner: zabbix
+        group: zabbix
+        mode: "{{ item. mode }}"
+      loop:
+        - { src: zabbix-pack, dst: "/usr/bin/", mode: "0770" }
+        - { src: zabbix-config/rabbitmq.conf, dst: "/etc/zabbix-agent/conf.d/", mode: "0444"}
+        - { src: zabbix-config/systemd.conf, dst: "/etc/zabbix-agent/conf.d/", mode: "0444"}
+        - { src: zabbix-config/tomcat.conf, dst: "/etc/zabbix-agent/conf.d/", mode: "0444"}
+      notify:
+        - Restart zabbix-agent
+
+  handlers:
+    - name: Restart zabbix-agent
+      ansible.builtin.systemd:
+        name: zabbix-agent
+        state: restarted
