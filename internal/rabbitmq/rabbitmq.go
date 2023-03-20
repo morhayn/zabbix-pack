@@ -132,7 +132,7 @@ func LenMessage(queue, vhost, user, pass string) error {
 		return err
 	}
 	q, err := GetQueue(client, vhost, queue)
-	fmt.Print(q.Messages)
+	fmt.Println(q.Messages)
 	return nil
 }
 func RedeliverMessage(queue, vhost, user, pass string) error {
@@ -141,7 +141,7 @@ func RedeliverMessage(queue, vhost, user, pass string) error {
 		return err
 	}
 	q, err := GetQueue(client, vhost, queue)
-	fmt.Print(q.MessageStats.Redeliver)
+	fmt.Println(q.MessageStats.Redeliver)
 	return nil
 }
 func ActiveConsumer(queue, vhost, user, pass string) error {
@@ -150,6 +150,6 @@ func ActiveConsumer(queue, vhost, user, pass string) error {
 		return err
 	}
 	q, err := GetQueue(client, vhost, queue)
-	fmt.Print(q.MessageStats.Redeliver)
+	fmt.Println(q.MessageStats.Redeliver)
 	return nil
 }

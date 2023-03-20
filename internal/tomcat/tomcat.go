@@ -82,9 +82,9 @@ func Status(warname, port, username, password string) error {
 	for _, warfile := range listTomcat {
 		if warfile.Name == warname {
 			if warfile.Status == "running" {
-				fmt.Print("1")
+				fmt.Println("1")
 			} else {
-				fmt.Print("0")
+				fmt.Println("0")
 			}
 			break
 		}

@@ -68,9 +68,9 @@ func Status(service string) error {
 		return err
 	}
 	if strings.TrimSpace(string(o)) == "active" {
-		fmt.Print("1")
+		fmt.Println("1")
 	} else {
-		fmt.Print("0")
+		fmt.Println("0")
 	}
 	return nil
 }
