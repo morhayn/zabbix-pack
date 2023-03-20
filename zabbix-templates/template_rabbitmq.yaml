@@ -35,13 +35,10 @@ zabbix_export:
               trigger_prototypes:
                 -
                   uuid: adee27bac6ca4fc484081f9fd2388907
-                  expression: 'last(/Module rabbit Queue Check/rabbitmq.lenmessage["{#QUEUENAME}"])>200'
+                  expression: 'last(/Module rabbit Queue Check/rabbit.lenmessage[{#QUEUENAME},{#VHOST}])>200'
                   name: 'Queue {#QUEUENAME} have more 200 mesaage!'
                   opdata: 'Service current state: {ITEM.LASTVALUE}'
                   priority: WARNING
-                  description: |
-                    Description: {#UNIT.DESCRIPTION}
-          item_prototypes:
             - uuid: 5ba04b190dfb491d9b3920b9212b7e93
               name:  Redeliver {#QUEUENAME}
               key: rabbit.redeliver[{#QUEUENAME},{#VHOST}]
@@ -57,13 +54,10 @@ zabbix_export:
               trigger_prototypes:
                 -
                   uuid: 70737e6aa5c74546b7821aae9ee41b7d
-                  expression: 'last(/Module rabbit Queue Check/rabbitmq.redeliver["{#QUEUENAME}"])>20'
+                  expression: 'last(/Module rabbit Queue Check/rabbit.redeliver[{#QUEUENAME},{#VHOST}])>20'
                   name: 'Redeliver messages {#QUEUENAME} have more 20!'
                   opdata: 'Service current state: {ITEM.LASTVALUE}'
                   priority: WARNING
-                  description: |
-                    Description: {#UNIT.DESCRIPTION}
-          item_prototypes:
             - uuid: 05b412ca9bcc4b2e88b226a4ad8cc10b
               name:  Active Consumer {#QUEUENAME}
               key: rabbit.activeconsumer[{#QUEUENAME},{#VHOST}]
@@ -79,9 +73,7 @@ zabbix_export:
               trigger_prototypes:
                 -
                   uuid: 096b4e1fe6794b90966575add3b62bf9
-                  expression: 'last(/Module rabbit Queue Check/rabbitmq.activeconsumer["{#QUEUENAME}"])=0'
+                  expression: 'last(/Module rabbit Queue Check/rabbit.activeconsumer[{#QUEUENAME},{#VHOST}])=0'
                   name: 'Active Consumer {#QUEUENAME} have more 0!'
                   opdata: 'Service current state: {ITEM.LASTVALUE}'
                   priority: WARNING
-                  description: |
-                    Description: {#UNIT.DESCRIPTION}

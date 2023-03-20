@@ -36,7 +36,7 @@ zabbix_export:
               trigger_prototypes:
                 -
                   uuid: 677dcbba58cd41dd930503206a23db75
-                  expression: 'last(/Module Tomcat Wars Check/rabbitmq.status["{#WAR.NAME}"])<>1'
+                  expression: 'last(/Module Tomcat Wars Check/tomcat.status[{#WAR.NAME}])<>1'
                   name: 'Tomcat war {#WAR.NAME} not running'
                   opdata: 'Service current state: {ITEM.LASTVALUE}'
                   priority: WARNING
