@@ -3,9 +3,11 @@ zabbix_export:
   date: "2021-04-16T15:29:35Z"
   groups:
     - 
-      name: Templates/Modules
+      uuid: 3c8c1a0d4a3548daac1ee18009fcbe37
+      name: Templates/Customs
   templates:
     - 
+      uuid: 6d754b5e05174d86962c7b8c1d08054d
       template: Module Systemd Check
       name: Module Systemd Check
       groups:
@@ -13,15 +15,17 @@ zabbix_export:
           name: Templates/Modules
       discovery_rules:
         - 
+          uuid: c3bd733c205642d09f53aa855fb11c12
           name: Systemd service discovery
           key: systemd.discover
           delay: 3h
           item_prototypes:
-            - name: Service {#UNIT.NAME} description {#UNIT.DESCRIPTION}
+            - uuid: d15ae6426de342699dafdde310a653ab
+              name: Service {#UNIT.NAME} description
               key: systemd.status[{#UNIT.NAME}]
               description: |
-                Description: {#UNIT.DESCRIPTION}
-                Path: {#UNIT.PATH}
+                Description:
+                Path:
               delay: 10m
               history: 14d
               trends: 180d
@@ -31,7 +35,8 @@ zabbix_export:
                   value: Systemd
               trigger_prototypes:
                 -
-                  expression: 'last(/Module Systemd Check/systemd.status["{#UNIT.NAME}"])<>1'
+                  uuid: a3d3bda6c9a24010bca833e7b072cb2a
+                  expression: 'last(/Module Systemd Check/systemd.status[{#UNIT.NAME}])<>1'
                   name: 'Service {#UNIT.NAME} is not running!'
                   opdata: 'Service current state: {ITEM.LASTVALUE}'
                   priority: WARNING
@@ -39,6 +44,7 @@ zabbix_export:
                     Description: {#UNIT.DESCRIPTION}
       valuemaps:
         -
+          uuid: bd80526621264293b06ca61ccf1d0e33
           name: 'Service state'
           mappings:
             -

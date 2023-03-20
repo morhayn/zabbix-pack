@@ -3,9 +3,11 @@ zabbix_export:
   date: "2021-04-16T15:29:35Z"
   groups:
     - 
-      name: Templates/Modules
+      uuid: 3c8c1a0d4a3548daac1ee18009fcbe37
+      name: Templates/Customs
   templates:
     - 
+      uuid: 2055bc821f56431088994fd4f802f048
       template: Module Tomcat Wars Check
       name: Module Tomcat Wars Check
       groups:
@@ -13,11 +15,14 @@ zabbix_export:
           name: Templates/Modules
       discovery_rules:
         - 
+          uuid: 6506648e7ae04a4f8b6f63113ba3e5bb
           name: Tomcat discovery
           key: tomcat.discover
           delay: 3h
           item_prototypes:
-            - name: TOMCAT {#WAR.NAME}
+            - 
+              uuid: 720822a5cdfb4e72abfeeccc3d1858a5
+              name: TOMCAT {#WAR.NAME}
               key: tomcat.status[{#WAR.NAME}]
               description: |
                 Description: {#WAR.NAME}
@@ -30,6 +35,7 @@ zabbix_export:
                   value: Tomcat
               trigger_prototypes:
                 -
+                  uuid: 677dcbba58cd41dd930503206a23db75
                   expression: 'last(/Module Tomcat Wars Check/rabbitmq.status["{#WAR.NAME}"])<>1'
                   name: 'Tomcat war {#WAR.NAME} not running'
                   opdata: 'Service current state: {ITEM.LASTVALUE}'
