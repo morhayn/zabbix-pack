@@ -1,6 +1,8 @@
 package argparser
 
 import (
+	"fmt"
+
 	"github.com/mkideal/cli"
 	"github.com/morhayn/zabbix-pack/internal/rabbitmq"
 	"github.com/morhayn/zabbix-pack/internal/systemd"
@@ -31,23 +33,27 @@ func Parser(arg *ArgT) error {
 	// if len(argSpl) < 2 {
 	// return fmt.Errorf("argSpl < 3")
 	// }
+	var err error
 	switch arg.Res {
 	case "systemd.discover":
-		systemd.Discover()
+		err = systemd.Discover()
 	case "systemd.status":
-		systemd.Status(arg.Name)
+		err = systemd.Status(arg.Name)
 	case "rabbitmq.discover":
-		rabbitmq.Discover(arg.User, arg.Pass)
+		err = rabbitmq.Discover(arg.Port, arg.User, arg.Pass)
 	case "rabbitmq.lenmessage":
-		rabbitmq.LenMessage(arg.Name, arg.Vhost, arg.User, arg.Pass)
+		err = rabbitmq.LenMessage(arg.Port, arg.Name, arg.Vhost, arg.User, arg.Pass)
 	case "rabbitmq.redeliver":
-		rabbitmq.RedeliverMessage(arg.Name, arg.Vhost, arg.User, arg.Pass)
+		err = rabbitmq.RedeliverMessage(arg.Port, arg.Name, arg.Vhost, arg.User, arg.Pass)
 	case "rabbitmq.activeconsume":
-		rabbitmq.ActiveConsumer(arg.Name, arg.Vhost, arg.User, arg.Pass)
+		err = rabbitmq.ActiveConsumer(arg.Port, arg.Name, arg.Vhost, arg.User, arg.Pass)
 	case "tomcat.discover":
-		tomcat.Discover(arg.Port, arg.User, arg.Pass)
+		err = tomcat.Discover(arg.Port, arg.User, arg.Pass)
 	case "tomcat.status":
-		tomcat.Status(arg.Name, arg.Port, arg.User, arg.Pass)
+		err = tomcat.Status(arg.Name, arg.Port, arg.User, arg.Pass)
+	}
+	if err != nil {
+		fmt.Println(err)
 	}
 	return nil
 }
