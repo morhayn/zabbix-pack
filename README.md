@@ -6,3 +6,6 @@
 + rabbitmq len message in queue
 + rabbitmq repdeliver messages in queue
 + rabbitmq active comsume in queue
+
++ tomcat discover
++ tomcat status

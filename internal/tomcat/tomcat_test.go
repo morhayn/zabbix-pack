@@ -2,7 +2,6 @@ package tomcat
 
 import (
 	"context"
-	"fmt"
 	"testing"
 
 	"github.com/testcontainers/testcontainers-go"
@@ -49,8 +48,12 @@ func TestRabbitMq(t *testing.T) {
 		}
 	})
 	p, _ := container.MappedPort(ctx, "8080/tcp")
-	fmt.Println(p)
+	// fmt.Println(p)
 	err = Discover(p.Port(), "user", "pass")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = Status("manager", p.Port(), "user", "pass")
 	if err != nil {
 		t.Fatal(err)
 	}
