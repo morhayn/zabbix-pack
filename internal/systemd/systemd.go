@@ -14,10 +14,14 @@ var (
 		"rabbitmq-server.service",
 		"postgresql.service",
 		"postgresql@9.6-main.service",
+		"pgbouncer.service",
 		"mongod.service",
 		"elasticsearch.service",
 		"nginx.service",
 		"haproxy.service",
+		"keepalived.service",
+		"lsyncd.service",
+		"docker.service",
 		"kafka.service",
 		"zookeeper.service",
 		"hazelcast.service",
@@ -64,7 +68,7 @@ func Discover() error {
 func Status(service string) error {
 	o, err := exec.Command("/bin/systemctl", "is-active", service).Output()
 	if err != nil {
-		fmt.Print("0")
+		fmt.Println("0")
 		return err
 	}
 	if strings.TrimSpace(string(o)) == "active" {
