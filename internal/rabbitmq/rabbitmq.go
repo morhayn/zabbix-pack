@@ -159,6 +159,6 @@ func ActiveConsumer(port, queue, vhost, user, pass string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(q.MessageStats.Redeliver)
+	fmt.Println(q.Consumers)
 	return nil
 }
