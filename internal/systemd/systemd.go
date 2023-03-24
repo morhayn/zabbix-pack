@@ -35,6 +35,8 @@ func newRes(name, descr string) map[string]string {
 	r["{#UNIT.DESCRIPTION}"] = descr
 	return r
 }
+
+// Discover return list service on server filtered modServ
 func Discover() error {
 	// serv := make(map[string]string)
 	result := make(map[string][]map[string]string)
@@ -65,6 +67,8 @@ func Discover() error {
 	fmt.Printf("%s\n", out)
 	return nil
 }
+
+// Status return status for service
 func Status(service string) error {
 	o, err := exec.Command("/bin/systemctl", "is-active", service).Output()
 	if err != nil {

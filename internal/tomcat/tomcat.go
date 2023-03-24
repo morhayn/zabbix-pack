@@ -15,7 +15,7 @@ type TomcatWar struct {
 	Status string
 }
 
-func TomcatParse(url, username, password, port string) ([]TomcatWar, error) {
+func tomcatParse(url, username, password, port string) ([]TomcatWar, error) {
 	tomcat := []TomcatWar{}
 	client, err := getreq.NewClient("http://127.0.0.1:"+port, username, password)
 	if err != nil {
@@ -50,10 +50,11 @@ func TomcatParse(url, username, password, port string) ([]TomcatWar, error) {
 	return tomcat, nil
 }
 
+// Discover return list tomcat modules
 func Discover(port, username, password string) error {
 	result := make(map[string][]map[string]string)
 	var res []map[string]string
-	listTomcat, err := TomcatParse("manager/text/list", username, password, port)
+	listTomcat, err := tomcatParse("manager/text/list", username, password, port)
 	if err != nil {
 		return err
 	}
@@ -73,8 +74,10 @@ func Discover(port, username, password string) error {
 	fmt.Printf("%s\n", out)
 	return nil
 }
+
+// Status return sttus one module tomcat
 func Status(warname, port, username, password string) error {
-	listTomcat, err := TomcatParse("manager/text/list", username, password, port)
+	listTomcat, err := tomcatParse("manager/text/list", username, password, port)
 	if err != nil {
 		fmt.Print("0")
 		return err

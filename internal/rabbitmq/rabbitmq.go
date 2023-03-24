@@ -9,59 +9,6 @@ import (
 	"github.com/morhayn/zabbix-pack/internal/getreq"
 )
 
-// NewTLSClient instantiates a client with a transport; it is up to the developer to make that layer secure.
-// func NewTLSClient(uri string, username string, password string, transport http.RoundTripper) (me *Client, err error) {
-// u, err := url.Parse(uri)
-// if err != nil {
-// return nil, err
-// }
-
-// me = &Client{
-// Endpoint:  uri,
-// host:      u.Host,
-// Username:  username,
-// Password:  password,
-// transport: transport,
-// }
-
-// return me, nil
-// }
-
-// SetTransport changes the Transport Layer that the Client will use.
-// func (c *Client) SetTransport(transport http.RoundTripper) {
-// c.transport = transport
-// }
-
-// func newGETRequestWithParameters(client *Client, path string, qs url.Values) (*http.Request, error) {
-// s := client.Endpoint + "/api/" + path + "?" + qs.Encode()
-
-// req, err := http.NewRequest("GET", s, nil)
-// if err != nil {
-// return nil, err
-// }
-
-// req.Close = true
-// req.SetBasicAuth(client.Username, client.Password)
-
-// return req, err
-// }
-
-// func newRequestWithBody(client *Client, method string, path string, body []byte) (*http.Request, error) {
-// s := client.Endpoint + "/api/" + path
-
-// req, err := http.NewRequest(method, s, bytes.NewReader(body))
-// if err != nil {
-// return nil, err
-// }
-
-// req.Close = true
-// req.SetBasicAuth(client.Username, client.Password)
-
-// req.Header.Add("Content-Type", "application/json")
-
-// return req, err
-// }
-
 // ListQueues lists all queues in the cluster. This only includes queues in the
 // virtual hosts accessible to the user.
 func listQueues(c *getreq.Client) (rec []QueueInfo, err error) {
@@ -104,6 +51,8 @@ func newQueue(q QueueInfo) map[string]string {
 	res["{#VHOST}"] = q.Vhost
 	return res
 }
+
+// Discover return all queue from rabbitmq-server
 func Discover(port, user, pass string) error {
 	result := make(map[string][]map[string]string)
 	var res []map[string]string
@@ -126,6 +75,8 @@ func Discover(port, user, pass string) error {
 	fmt.Printf("%s\n", out)
 	return nil
 }
+
+// LenMessage return count message in queue
 func LenMessage(port, queue, vhost, user, pass string) error {
 	client, err := makeRabbitMQClient("http://127.0.0.1:"+port, user, pass, 2*time.Second)
 	if err != nil {
@@ -138,6 +89,8 @@ func LenMessage(port, queue, vhost, user, pass string) error {
 	fmt.Println(q.Messages)
 	return nil
 }
+
+// RedeliverMessage return count redeliver messages
 func RedeliverMessage(port, queue, vhost, user, pass string) error {
 	client, err := makeRabbitMQClient("http://127.0.0.1:"+port, user, pass, 2*time.Second)
 	if err != nil {
@@ -150,6 +103,8 @@ func RedeliverMessage(port, queue, vhost, user, pass string) error {
 	fmt.Println(q.MessageStats.Redeliver)
 	return nil
 }
+
+// ActiveConsumer return count consumer for queue
 func ActiveConsumer(port, queue, vhost, user, pass string) error {
 	client, err := makeRabbitMQClient("http://127.0.0.1:"+port, user, pass, 2*time.Second)
 	if err != nil {
