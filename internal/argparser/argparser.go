@@ -17,7 +17,7 @@ import (
 var (
 	checkFun func(...string) error
 )
-
+// ArgT input parametres module
 type ArgT struct {
 	cli.Helper
 	Res   string `cli:"r,res" usage:"name resurce for monitoring"`
@@ -28,6 +28,7 @@ type ArgT struct {
 	Port  string `cli:"port" usage:"tomcat port"`
 }
 
+// Parser call function for collect couners  
 func Parser(arg *ArgT) error {
 	// argSpl := strings.Split(arg.Res, ".")
 	// if len(argSpl) < 2 {

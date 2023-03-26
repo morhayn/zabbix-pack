@@ -33,7 +33,7 @@ func startContainer(ctx context.Context) (*rabbitContainer, error) {
 	if err != nil {
 		return nil, err
 	}
-	container.CopyFileToContainer(ctx, "./tomcat-user.xml", "/usr/local/tomcat/conf/", 440)
+	container.CopyFileToContainer(ctx, "./testdata/tomcat-user.xml", "/usr/local/tomcat/conf/", 440)
 	return &rabbitContainer{Container: container}, nil
 }
 func TestRabbitMq(t *testing.T) {
