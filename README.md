@@ -9,3 +9,5 @@
 
 + tomcat discover
 + tomcat status
+
+ansible-playbook -i inventory playbook.yml

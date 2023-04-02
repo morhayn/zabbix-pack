@@ -2,6 +2,15 @@
   hosts: all
   become: true
   tasks:
+    - name: Install zabbix-agent
+      ansible.builtin.package:
+        name: "zabbix-agent"
+        state: present
+    - name: Enable zabbix-agent service
+      ansible.builtin.systemd:
+        name: "zabbix-agent"
+        enabled: true
+        state: started  
     - name: Copy files
       ansible.builtin.copy:
         src: "{{ item.src }}"

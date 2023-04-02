@@ -32,19 +32,18 @@ func CheckTime(min, max int, path string) {
 		}
 		// size := file.Size()
 	}
-	// time last file
+	// duration time last file in hours
 	diffMin := int(time.Now().Sub(minTime).Hours())
-	//  time older file
+	// duration time older file in hours
 	diffMax := int(time.Now().Sub(maxTime).Hours())
 	if diffMin > min {
-		//  file older min value. Backup not create?
+		// last file older min value. Backup not create?
 		fmt.Println("0")
 	}
 	if diffMax > max {
-		// oldest backup file not deleted
+		// oldest backup file oldest max value. Its not deleted?
 		fmt.Println("0")
 	}
-
 	// check size file
 	// result processing
 	// deciding on result
